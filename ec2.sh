@@ -15,8 +15,7 @@ aws ec2 create-subnet \
     --region "us-east-1" \
     --availability-zone "us-east-1a" \
     --query "Subnet.SubnetId"
-# "subnet-03064621e813f9ddb"
-
+# "subnet-0491583d91f974245"
 
 # create subnet2
 aws ec2 create-subnet \
@@ -27,7 +26,7 @@ aws ec2 create-subnet \
     --availability-zone "us-east-1b" \
     --query "Subnet.SubnetId"
 
-# "subnet-01416e69287e3ff48"
+# "subnet-0fa7b0517fad0af7a"  
 
 
 # create Internet Gateway
@@ -36,3 +35,9 @@ aws ec2 create-internet-gateway \
     --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=Jenkins-igw}]" \
     --query "InternetGateway.InternetGatewayId"
 # "igw-061da5154253487d4"
+
+
+# Attach Igw to Vpc
+aws ec2 attach-internet-gateway \
+    --vpc-id "vpc-088ec956294cef3a5" \
+    --internet-gateway-id "igw-0b964d23b8e8553bb"
