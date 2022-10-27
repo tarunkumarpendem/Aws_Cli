@@ -20,7 +20,7 @@ Vpc_Id=$(aws ec2 create-vpc \
   --tag-specification "ResourceType=vpc,Tags=[{Key=Name,Value=Jenkins_vpc}]" \
   --output text \
   --region $REGION)
-echo Vpc_Id = "$VPC_ID"  
+echo Vpc_Id = $VPC_ID  
 
 
 # Create Public Subnet
@@ -32,4 +32,4 @@ Subnet_Id=$(aws ec2 create-subnet \
   --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=Public_Subnet}]" \
   --output text \
   --region $REGION)
-echo Subnet_Id = "$SUBNET_ID"
+echo Subnet_Id = $SUBNET_ID
