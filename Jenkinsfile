@@ -11,7 +11,7 @@ pipeline{
         }
         stage('script'){
             steps{
-                sh 'sh test.sh'
+                sh 'sh ec2.sh'
             }
         }
     }
