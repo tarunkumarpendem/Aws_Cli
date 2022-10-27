@@ -18,6 +18,7 @@ Vpc_Id=$(aws ec2 create-vpc \
   --cidr-block $VPC_CIDR \
   --query 'Vpc.VpcId' \
   --tag-specification "ResourceType=vpc,Tags=[{Key=Name,Value=Jenkins_vpc}]" \
+  --output text \
   --region $REGION)
 echo Vpc_Id = "$Vpc_Id"  
 
