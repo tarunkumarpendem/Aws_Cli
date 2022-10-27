@@ -13,6 +13,10 @@ SUBNET_AZ="us-west-2a"
 DESTINATION_CIDR="0.0.0.0/0"
 SECURITY_GROUP_NAME="Jenkins-Sg"
 PROTOCOL="tcp"
+OREGON_AMI_ID="ami-0c09c7eb16d3e8e70"
+INSTANCE_TYPE="t2.micro"
+KEY_PAIR="standard"
+INSTANCES_COUNT="1"
 #==============================================================================
 #   DO NOT MODIFY CODE BELOW
 #==============================================================================
@@ -123,7 +127,7 @@ Sg_Rule_Id2=$(aws ec2 authorize-security-group-ingress \
     --cidr $DESTINATION_CIDR \
     --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_http}]" \
     --output text) 
-echo SSH_Sg_Id = "$Sg_Rule_Id2"
+echo HTTP_Sg_Id = "$Sg_Rule_Id2"
 
 
 # creating security group inbound rules port-8080
@@ -136,14 +140,22 @@ Sg_Rule_Id3=$(aws ec2 authorize-security-group-ingress \
     --cidr $DESTINATION_CIDR \
     --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_8080}]" \
     --output text) 
-echo SSH_Sg_Id = "$Sg_Rule_Id3"
+echo 8080_Sg_Id = "$Sg_Rule_Id3"
 
 
-
-
-
-
-
-
+# create ec2 instance
+Instance_Id=$(aws ec2 run-instances \
+    --image-id $OREGON_AMI_ID \
+    --instance-type $INSTANCE_TYPE \
+    --key-name $KEY_PAIR \
+    --security-group-ids $Security_GroupId \
+    --subnet-id $Subnet_Id \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Jenkins-Cli-Instance}]" \
+    --associate-public-ip-address \
+    --region $REGION \
+    --query 'Instances[0].InstanceId' \
+    --count $INSTANCES_COUNT \
+    --output text)
+echo Instance-Id = "$Instance_Id"    
 
 
