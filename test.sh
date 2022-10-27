@@ -59,7 +59,7 @@ echo Internet-GatewayId = "$Internet_Gateway"
 RouteTable_Id=$(aws ec2 create-route-table \
     --vpc-id $Vpc_Id \
     --region $REGION \
-    --query '"RouteTable.RouteTableId"' \
+    --query 'RouteTable.RouteTableId' \
     --tag-specifications "ResourceType=route-table,Tags=[{Key=Name,Value=Jenkins-Rt}]" \
     --output text) 
 echo $RouteTable-Id = "$RouteTable_Id"    
