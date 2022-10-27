@@ -16,8 +16,9 @@ SUBNET_AZ="us-west-2a"
 # Create VPC
 VPC_ID=$(aws ec2 create-vpc \
   --cidr-block $VPC_CIDR \
-  --query "Vpc.VpcId" \
+  --query 'Vpc.{VpcId:VpcId}' \
   --tag-specification "ResourceType=vpc,Tags=[{Key=Name,Value=Jenkins_vpc}]" \
+  --output text \
   --region $REGION)
 echo Vpc_Id = $VPC_ID  
 
@@ -27,7 +28,8 @@ SUBNET_ID=$(aws ec2 create-subnet \
   --vpc-id $VPC_ID \
   --cidr-block $SUBNET_CIDR \
   --availability-zone $SUBNET_AZ \
-  --query "Subnet.SubnetId" \
+  --query 'Subnet.{SubnetId:SubnetId}' \
   --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=Public_Subnet}]" \
+  --output text \
   --region $REGION)
 echo Subnet_Id = $SUBNET_ID
