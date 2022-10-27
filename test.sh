@@ -40,7 +40,7 @@ Internet_Gateway=$(aws ec2 create-internet-gateway \
     --region $REGION \
     --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=Jenkins-igw}]" \
     --output text \
-    --query "InternetGateway.InternetGatewayId)"
+    --query "InternetGateway.InternetGatewayId")
 echo Internet-GatewayId = "$Internet_Gateway"    
 
 
