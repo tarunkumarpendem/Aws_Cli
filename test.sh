@@ -37,14 +37,17 @@ echo Subnet_Id = "$Subnet_Id"
 
 # create Internet Gateway
 Internet_Gateway=$(aws ec2 create-internet-gateway \
-    --region $REGION \
     --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=Jenkins-igw}]" \
     --output text \
-    --query "InternetGateway.InternetGatewayId")
+    --query "InternetGateway.InternetGatewayId" \
+    --region $REGION)
 echo Internet-GatewayId = "$Internet_Gateway"    
 
 
 # Attach Igw to Vpc
 aws ec2 attach-internet-gateway \
     --vpc-id $Vpc_Id \
+    --output text \
     --internet-gateway-id $Internet_Gateway
+echo Vpc_Id = "$Vpc_Id"
+echo Internet-GatewayId = "$Internet_Gateway"
