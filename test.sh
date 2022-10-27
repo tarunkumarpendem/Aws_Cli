@@ -29,5 +29,6 @@ Subnet_Id=$(aws ec2 create-subnet \
   --availability-zone $SUBNET_AZ \
   --query 'Subnet.SubnetId' \
   --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=Public_Subnet}]" \
+  --output text \
   --region $REGION)
 echo Subnet_Id = "$Subnet_Id"
