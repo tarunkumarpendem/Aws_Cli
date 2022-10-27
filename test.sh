@@ -11,6 +11,8 @@ VPC_CIDR="10.10.0.0/16"
 SUBNET_CIDR="10.10.0.0/24"
 SUBNET_AZ="us-west-2a"
 DESTINATION_CIDR="0.0.0.0/0"
+SECURITY_GROUP_NAME="Jenkins-Sg"
+PROTOCOL="tcp"
 #==============================================================================
 #   DO NOT MODIFY CODE BELOW
 #==============================================================================
@@ -83,7 +85,59 @@ RouteTable_Association_Id=$(aws ec2 associate-route-table \
     --output text \
     --region $REGION)
 echo RouteTable-Id = "$RouteTable_Id"
-echo RouteTable-Association-Id = "$RouteTable_Association_Id"   
+echo RouteTable-Association-Id = "$RouteTable_Association_Id"
+
+
+# create security group 
+Security_GroupId=$(aws ec2 create-security-group \
+    --group-name $SECURITY_GROUP_NAME \
+    --vpc-id $Vpc_Id \
+    --tag-specifications "ResourceType=security-group,Tags=[{Key=Name,Value=Jenkins_Security_Group}]" \
+    --description "For Jenkins" \
+    --region $REGION \
+    --output text \
+    --query 'GroupId')
+echo Security-GroupId = "$Security_GroupId"    
+    
+
+# creating security group inbound rules port-22(ssh)
+Sg_Rule_Id1=$(aws ec2 authorize-security-group-ingress \
+    --group-id $Security_GroupId \
+    --region $REGION \
+    --query 'SecurityGroupRules[0].SecurityGroupRuleId' \
+    --protocol $PROTOCOL \
+    --port "22" \
+    --cidr $DESTINATION_CIDR \
+    --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_Ssh}]" \
+    --output text) 
+echo SSH_Sg_Id = "$Sg_Rule_Id1"
+
+
+# creating security group inbound rules port-80(http)
+Sg_Rule_Id2=$(aws ec2 authorize-security-group-ingress \
+    --group-id $Security_GroupId \
+    --region $REGION \
+    --query 'SecurityGroupRules[0].SecurityGroupRuleId' \
+    --protocol $PROTOCOL \
+    --port "80" \
+    --cidr $DESTINATION_CIDR \
+    --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_http}]" \
+    --output text) 
+echo SSH_Sg_Id = "$Sg_Rule_Id2"
+
+
+# creating security group inbound rules port-8080
+Sg_Rule_Id3=$(aws ec2 authorize-security-group-ingress \
+    --group-id $Security_GroupId \
+    --region $REGION \
+    --query 'SecurityGroupRules[0].SecurityGroupRuleId' \
+    --protocol $PROTOCOL \
+    --port "8080" \
+    --cidr $DESTINATION_CIDR \
+    --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_8080}]" \
+    --output text) 
+echo SSH_Sg_Id = "$Sg_Rule_Id3"
+
 
 
 
