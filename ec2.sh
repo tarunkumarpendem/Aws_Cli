@@ -1,34 +1,13 @@
-# creating security group inbound rules port-22(ssh)
-aws ec2 authorize-security-group-ingress \
-    --group-id "sg-051700ec3f8a3d7f9" \
+# create ec2 instance
+aws ec2 run-instances \
+    --image-id "ami-0149b2da6ceec4bb0" \
+    --instance-type "t2.micro" \
+    --key-name "standard" \
+    --security-group-ids "sg-051700ec3f8a3d7f9" \
+    --subnet-id "subnet-05f3deda72e32439c" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Jenkins-Cli-Instance}]" \
+    --associate-public-ip-address \
     --region "us-east-1" \
-    --query "SecurityGroupRules[0].SecurityGroupRuleId" \
-    --protocol "tcp" \
-    --port "22" \
-    --cidr "0.0.0.0/0" \
-    --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_Ssh}]"
-
-
-
-# creating security group inbound rules port-80(http)
-aws ec2 authorize-security-group-ingress \
-    --group-id "sg-051700ec3f8a3d7f9" \
-    --region "us-east-1" \
-    --query "SecurityGroupRules[0].SecurityGroupRuleId" \
-    --protocol "tcp" \
-    --port "80" \
-    --cidr "0.0.0.0/0" \
-    --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_http}]"
-
-
-
-
-# creating security group inbound rules port-8080
-aws ec2 authorize-security-group-ingress \
-    --group-id "sg-051700ec3f8a3d7f9" \
-    --region "us-east-1" \
-    --query "SecurityGroupRules[0].SecurityGroupRuleId" \
-    --protocol "tcp" \
-    --port "8080" \
-    --cidr "0.0.0.0/0" \
-    --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Name,Value=Open_8080}]"
+    --query "Instances[0].InstanceId" \
+    --count "1" \
+    --user-data "sudo apt update, sudo apt install apache2 -y"
