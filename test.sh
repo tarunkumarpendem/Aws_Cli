@@ -30,7 +30,7 @@ Subnet_Id=$(aws ec2 create-subnet \
   --cidr-block $SUBNET_CIDR \
   --availability-zone $SUBNET_AZ \
   --query 'Subnet.SubnetId' \
-  --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=Public_Subnet}]" \
+  --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=Jenkins_Subnet}]" \
   --output text \
   --region $REGION)
 echo Subnet_Id = "$Subnet_Id"
